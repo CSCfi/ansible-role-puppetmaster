@@ -4,18 +4,16 @@
   - eyaml
 
 :hierarchy:
-  - secret/overrides_for_%{::environment}
   - secret/%{::environment}
   - secret/common
   - "hosts/%{::clientcert}"
-  - overrides_for_%{::environment}
   - "%{::environment}"
   - users
   - common
 
 :yaml:
-  :datadir: "{{puppet_etc_dir}}/environments/%{::environment}/hieradata"
+  :datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
 :eyaml:
-  :datadir: "{{puppet_etc_dir}}/environments/%{::environment}/hieradata"
+  :datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
   :pkcs7_private_key: "{{hiera_private_key_file}}"
   :pkcs7_public_key:  "{{hiera_public_key_file}}"
