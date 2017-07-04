@@ -15,13 +15,14 @@ rpm_packages:
 ruby_gems:
  - r10k
  - hiera-eyaml
+# workaround: puppet_forge 2.2.7 requires semantic_puppet ~> 1.0 while r10k requires ~> 0.1
 ruby_gems_versions:
   puppet_forge:
     version: 2.2.6
   r10k:
-    version: latest
+    version:
   hiera-eyaml:
-    version: latest
+    version:
 
 hiera_private_key: "{{lookup('env','HIERA_PRIVATE_KEY')}}"
 hiera_public_key: "{{lookup('env','HIERA_PUBLIC_KEY')}}"
