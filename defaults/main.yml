@@ -15,6 +15,13 @@ rpm_packages:
 ruby_gems:
  - r10k
  - hiera-eyaml
+ruby_gems_versions:
+  puppet_forge:
+    version: 2.2.6
+  r10k:
+    version: latest
+  hiera-eyaml:
+    version: latest
 
 hiera_private_key: "{{lookup('env','HIERA_PRIVATE_KEY')}}"
 hiera_public_key: "{{lookup('env','HIERA_PUBLIC_KEY')}}"

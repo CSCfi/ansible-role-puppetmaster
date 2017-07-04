@@ -23,8 +23,8 @@
   with_items: "{{rpm_packages}}"
 
 - name: install ruby gems
-  gem: name={{item}} state=present user_install=no
-  with_items: "{{ruby_gems}}"
+  gem: name="{{item.key}}" state=present user_install=no version="{{item.value.version}}"
+  with_dict: "{{ruby_gems_versions}}"
 
 - name: deploy basic puppet.conf for initial bootstrapping
   template: src=puppet.conf dest={{puppet_etc_dir}}/puppet.conf
