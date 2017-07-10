@@ -24,8 +24,8 @@
 
 # workaround: puppet_forge 2.2.7 requires semantic_puppet ~> 1.0 while r10k requires ~> 0.1
 - name: install ruby gems
-  gem: name="{{item.key}}" state=present user_install=no version="{{item.value.version}}"
-  with_dict: "{{ruby_gems_versions}}"
+  gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}}"
+  with_items: "{{ruby_gems_versions}}"
 
 - name: deploy basic puppet.conf for initial bootstrapping
   template: src=puppet.conf dest={{puppet_etc_dir}}/puppet.conf
