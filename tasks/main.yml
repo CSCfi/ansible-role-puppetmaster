@@ -104,7 +104,7 @@
   when: not puppet_configured.stat.exists
 
 - name: Dynamic cccp feature branch assignment
-  shell: "sed -i '/cccp.git/!b;n;c\ \ :ref\ \=\>\ '\''{{cccp_branch}}'\''' {{puppet_etc_dir}}/environments/{{puppet_environment}}/Puppetfile"
+  shell: sed -i "/cccp.git/!b;n;c\ \ :ref\ \=\>\ \'{{cccp_branch}}\'" "{{puppet_etc_dir}}/environments/{{puppet_environment}}/Puppetfile"
 
 - name: run masterless puppet to configure the puppetmaster
   command: "puppet apply --environment {{puppet_environment}} --pluginsync --hiera_config {{puppet_etc_dir}}/hiera.yaml --modulepath {{puppet_etc_dir}}/environments/{{puppet_environment}}/modules {{puppet_etc_dir}}/environments/{{puppet_environment}}/manifests"
