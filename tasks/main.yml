@@ -107,11 +107,12 @@
 - shell: /opt/puppetlabs/puppet/bin/gem install hiera-eyaml
   ignore_errors: True
 - name: check puppetserver gem
-  shell: puppetserver gem list | grep hiera-eyaml
+  shell: /opt/puppetlabs/server/bin/puppetserver gem list | grep hiera-eyaml
   register: gem_list_eyaml
   ignore_errors: True
-- shell: /opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml
-  when: gem_list_eyaml.rc != 0
+- name: install hiera-eyaml if puppetserver gem list does not find it with proxy if defined
+  command: "/opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml -p {{ yum_proxy }}"
+  when: gem_list_eyaml.rc != 0 and yum_proxy is defined
   ignore_errors: True
 
 - name: generate client certificate for puppetmaster
