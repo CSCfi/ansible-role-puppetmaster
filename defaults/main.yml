@@ -12,12 +12,9 @@ rpm_packages:
  - puppet
  - puppet-server
  - rubygems
-ruby_gems:
- - r10k
- - hiera-eyaml
-# workaround: puppet_forge 2.2.7 requires semantic_puppet ~> 1.0 while r10k requires ~> 0.1
+# Pinning to specific gem versions should be done on the playbook level.
 ruby_gems_versions:
-  - { gem: 'puppet_forge', version: '2.2.6' }
+  - { gem: 'puppet_forge', version: '' }
   - { gem: 'r10k', version: '' }
   - { gem: 'hiera-eyaml', version: '' }
 
