@@ -66,24 +66,28 @@
 - name: deploy puppet environment with r10k
   command: "/usr/local/bin/r10k deploy environment -c {{puppet_etc_dir}}/r10k.yaml -p -v error {{puppet_environment}}"
 
-- shell: rm -Rf /etc/puppetlabs/code/modules
-- shell: ln -s {{puppet_code_dir}}/environments/{{puppet_environment}}/modules /etc/puppetlabs/code/modules
-  ignore_errors: True
-- lineinfile:
+- name: put puppet4 binaries to root's PATH
+  lineinfile:
     dest: /root/.bashrc
     insertafter: EOF
     line: PATH=$PATH:/opt/puppetlabs/bin
+
+- shell: rm -Rf /etc/puppetlabs/code/modules
+- shell: ln -s {{puppet_code_dir}}/environments/{{puppet_environment}}/modules /etc/puppetlabs/code/modules
+  ignore_errors: True
 - shell: "mkdir {{puppet_code_dir}}/environments/production"
   ignore_errors: True
 - shell: "ln -s /etc/puppetlabs/puppet /etc/puppet"
   ignore_errors: True
-- shell: /opt/puppetlabs/puppet/bin/gem install hiera-eyaml
+
+- name: try hiera-eyaml gem install without proxy
+  shell: /opt/puppetlabs/puppet/bin/gem install hiera-eyaml
   ignore_errors: True
-- name: check puppetserver gem
+- name: check hiera-eyaml gem
   shell: /opt/puppetlabs/server/bin/puppetserver gem list | grep hiera-eyaml
   register: gem_list_eyaml
   ignore_errors: True
-- name: install hiera-eyaml if puppetserver gem list does not find it with proxy if defined
+- name: install hiera-eyaml with proxy defined if puppetserver gem list does not find
   command: "/opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml -p {{ yum_proxy }}"
   when: gem_list_eyaml.rc != 0 and yum_proxy is defined
   ignore_errors: True
