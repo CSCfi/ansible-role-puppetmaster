@@ -69,14 +69,10 @@
 - shell: rm -Rf /etc/puppetlabs/code/modules
 - shell: ln -s {{puppet_code_dir}}/environments/{{puppet_environment}}/modules /etc/puppetlabs/code/modules
   ignore_errors: True
-- shell: ln -s /opt/puppetlabs/bin/facter /usr/local/bin/
-  ignore_errors: True
-- shell: ln -s /opt/puppetlabs/bin/puppet* /usr/local/bin/
-  ignore_errors: True
-- shell: ln -s /opt/puppetlabs/bin/mco /usr/local/bin/
-  ignore_errors: True
-- shell: ln -s /opt/puppetlabs/bin/hiera /usr/local/bin/
-  ignore_errors: True
+- lineinfile:
+    dest: /root/.bashrc
+    insertafter: EOF
+    line: PATH=$PATH:/opt/puppetlabs/bin
 - shell: "mkdir {{puppet_code_dir}}/environments/production"
   ignore_errors: True
 - shell: "ln -s /etc/puppetlabs/puppet /etc/puppet"
