@@ -16,6 +16,7 @@
   yum: name={{item}} state=present
   with_items: "{{rpm_packages}}"
 
+# workaround: puppet_forge 2.2.7 requires semantic_puppet ~> 1.0 while r10k requires ~> 0.1
 - name: install ruby gems
   gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}}"
   with_items: "{{ruby_gems_versions}}"
@@ -65,24 +66,6 @@
 - name: deploy puppet environment with r10k
   command: "/usr/local/bin/r10k deploy environment -c {{puppet_etc_dir}}/r10k.yaml -p -v error {{puppet_environment}}"
 
-- name: modify puppetdb manage_firewall setting
-  blockinfile:
-    path: "{{puppet_code_dir}}/environments/{{puppet_environment}}/modules/cccp/manifests/role/puppetmaster.pp"
-    insertbefore: java_args
-    marker: "# {mark} ANSIBLE MANAGED BLOCK ONE"
-    block: |2
-        manage_firewall => false,
-- name: add invocation to modules which configure puppetserver
-  blockinfile:
-    path: "{{puppet_code_dir}}/environments/{{puppet_environment}}/modules/cccp/manifests/role/puppetmaster.pp"
-    insertbefore: "class { 'opsviewagent"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK TWO"
-    block: |2
-        class { 'puppetserver::repository': } ->
-        class { 'puppetserver': }
-
-- shell: 'sed -i "/puppet::master/,+5d" {{puppet_code_dir}}/environments/{{puppet_environment}}/modules/cccp/manifests/role/puppetmaster.pp'
-  ignore_errors: True
 - shell: rm -Rf /etc/puppetlabs/code/modules
 - shell: ln -s {{puppet_code_dir}}/environments/{{puppet_environment}}/modules /etc/puppetlabs/code/modules
   ignore_errors: True
