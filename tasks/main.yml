@@ -66,12 +66,6 @@
 - name: deploy puppet environment with r10k
   command: "/usr/local/bin/r10k deploy environment -c {{puppet_etc_dir}}/r10k.yaml -p -v error {{puppet_environment}}"
 
-- name: put puppet4 binaries to root's PATH
-  lineinfile:
-    dest: /root/.bashrc
-    insertafter: EOF
-    line: PATH=$PATH:/opt/puppetlabs/bin
-
 - name: ensure puppet can create the modules directory
   shell: chown -R puppet:puppet /etc/puppetlabs
 
