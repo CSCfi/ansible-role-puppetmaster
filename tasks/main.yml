@@ -72,13 +72,8 @@
     insertafter: EOF
     line: PATH=$PATH:/opt/puppetlabs/bin
 
-- shell: rm -Rf /etc/puppetlabs/code/modules
-- shell: ln -s {{puppet_code_dir}}/environments/{{puppet_environment}}/modules /etc/puppetlabs/code/modules
-  ignore_errors: True
-- shell: "mkdir {{puppet_code_dir}}/environments/production"
-  ignore_errors: True
-- shell: "ln -s /etc/puppetlabs/puppet /etc/puppet"
-  ignore_errors: True
+- name: ensure puppet can create the modules directory
+  shell: chown -R puppet:puppet /etc/puppetlabs
 
 - name: try hiera-eyaml gem install without proxy
   shell: /opt/puppetlabs/puppet/bin/gem install hiera-eyaml
