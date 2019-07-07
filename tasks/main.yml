@@ -69,17 +69,18 @@
 - name: ensure puppet can create the modules directory
   shell: chown -R puppet:puppet /etc/puppetlabs
 
+# puppetserver manages its own gems, and hiera-eyaml needs to be added
+# to those gems for secrets to get passed properly to agents.
 - name: try hiera-eyaml gem install without proxy
-  shell: /opt/puppetlabs/puppet/bin/gem install hiera-eyaml
+  shell: /opt/puppetlabs/puppet/bin/puppetserver gem install hiera-eyaml
   ignore_errors: True
 - name: check hiera-eyaml gem
   shell: /opt/puppetlabs/server/bin/puppetserver gem list | grep hiera-eyaml
   register: gem_list_eyaml
   ignore_errors: True
-- name: install hiera-eyaml with proxy defined if puppetserver gem list does not find
+- name: install hiera-eyaml with proxy defined if puppetserver gem list did not find it
   command: "/opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml -p {{ yum_proxy }}"
   when: gem_list_eyaml.rc != 0 and yum_proxy is defined
-  ignore_errors: True
 
 - name: generate client certificate for puppetmaster
   command: "/opt/puppetlabs/bin/puppet cert --generate {{hostname}}"
