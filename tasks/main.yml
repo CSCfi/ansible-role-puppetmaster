@@ -16,7 +16,6 @@
   yum: name={{item}} state=present
   with_items: "{{rpm_packages}}"
 
-# workaround: puppet_forge 2.2.7 requires semantic_puppet ~> 1.0 while r10k requires ~> 0.1
 - name: install ruby gems
   gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}}"
   with_items: "{{ruby_gems_versions}}"
@@ -67,10 +66,9 @@
   command: "/usr/local/bin/r10k deploy environment -c {{puppet_etc_dir}}/r10k.yaml -p -v error {{puppet_environment}}"
 
 - name: ensure puppet can create the modules directory
-  shell: chown -R puppet:puppet /etc/puppetlabs
+  shell: chown -R puppet:puppet /etc/puppetlabs/code
 
-# puppetserver manages its own gems, and hiera-eyaml needs to be added
-# to those gems for secrets to get passed properly to agents.
+# puppetserver manages its own gems, and hiera-eyaml needs to be added to those gems for secrets to get passed properly to agents.
 - name: try hiera-eyaml gem install without proxy
   shell: /opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml
   ignore_errors: True
