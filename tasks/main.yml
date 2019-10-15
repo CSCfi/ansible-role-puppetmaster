@@ -7,6 +7,11 @@
   register: puppet_configured
   ignore_errors: True
 
+- name: check if puppet.conf is OK
+  command: "grep -c 'server = ' {{puppet_etc_dir}}/puppet.conf"
+  register: puppet_conf_configured
+  ignore_errors: True
+
 - name: install puppetlabs repo
   yum: name={{item}} state=present
   with_items:
@@ -22,7 +27,7 @@
 
 - name: deploy basic puppet.conf for initial bootstrapping
   template: src=puppet.conf dest={{puppet_etc_dir}}/puppet.conf
-  when: puppet_configured is failed
+  when: puppet_configured is failed or puppet_conf_configured is failed
 
 - name: ensure hiera keys directory exists
   file: path="{{hiera_credentials_dir}}" state=directory
