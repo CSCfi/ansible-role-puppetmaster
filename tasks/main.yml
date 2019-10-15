@@ -69,8 +69,8 @@
   shell: chown -R puppet:puppet /etc/puppetlabs/code
 
 # puppetserver manages its own gems, and hiera-eyaml needs to be added to those gems for secrets to get passed properly to agents.
-- name: try hiera-eyaml gem install without proxy
-  shell: /opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml
+- name: try hiera-eyaml gem install without proxy - timeout after 1min
+  shell: timeout 1m /opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml
   ignore_errors: True
 - name: check hiera-eyaml gem
   shell: /opt/puppetlabs/server/bin/puppetserver gem list | grep hiera-eyaml
