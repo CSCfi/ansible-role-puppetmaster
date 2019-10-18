@@ -86,7 +86,7 @@
   ignore_errors: True
 - name: install hiera-eyaml with proxy defined if puppetserver gem list did not find it
   command: "/opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml -p {{ yum_proxy }}"
-  when: gem_list_eyaml.rc != 0 and yum_proxy is defined
+  when: gem_list_eyaml.rc != 0 and yum_proxy is defined and not ansible_check_mode
 
 - name: generate client certificate for puppetmaster
   command: "/opt/puppetlabs/bin/puppet cert --generate {{hostname}}"
