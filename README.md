@@ -45,3 +45,5 @@ Caveats
 
 You **must** set the inventory hostname for the Puppet master to be the same as
 the host's FQDN.
+
+Needs puppetmaster paths to contain puppetlabs: puppet3 is not supported.
