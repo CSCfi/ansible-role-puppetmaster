@@ -29,6 +29,9 @@
   template: src=puppet.conf dest={{puppet_etc_dir}}/puppet.conf
   when: puppet_configured is failed or puppet_conf_configured is failed
 
+- name: deploy basic puppetdb.conf for initial bootstrapping
+  template: src=puppetdb.conf dest={{puppet_etc_dir}}/puppetdb.conf
+
 - name: ensure hiera keys directory exists
   file: path="{{hiera_credentials_dir}}" state=directory
         group={{puppet_username}} owner={{puppet_username}} mode=0750
