@@ -2,8 +2,9 @@
 - name: set ssh config for root user
   template: src=ssh_config dest=/root/.ssh/config owner=root group=root mode=0600
 
-- name: check if puppet is already configured
-  command: "ls {{puppet_etc_dir}}"
+- name: stat path for puppet_etc_dir - used check if puppet is already configured
+  stat: 
+    path: "{{puppet_etc_dir}}"
   register: puppet_configured
   ignore_errors: True
 
