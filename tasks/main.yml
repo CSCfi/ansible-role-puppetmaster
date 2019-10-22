@@ -89,13 +89,13 @@
   shell: /opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml
   when: not ansible_check_mode and gem_list_eyaml.rc != 0 and yum_proxy is not defined
 
-- name: generate client certificate for puppetmaster
+- name: generate client certificate for puppetmaster on bootstrap
   command: "/opt/puppetlabs/bin/puppet cert --generate {{hostname}}"
-  when: puppet_configured is failed
+  when: not puppet_configured.stat.exists
 
-- name: ignite CA directory
+- name: ignite CA directory on bootstrap
   command: "/opt/puppetlabs/bin/puppet cert list -a"
-  when: puppet_configured is failed
+  when: not puppet_configured.stat.exists
 
 - name: run masterless puppet to configure the puppetmaster
   command: "/opt/puppetlabs/bin/puppet apply --environment {{puppet_environment}} --pluginsync --hiera_config {{puppet_etc_dir}}/hiera.yaml --modulepath {{puppet_code_dir}}/environments/{{puppet_environment}}/modules {{puppet_code_dir}}/environments/{{puppet_environment}}/manifests"
