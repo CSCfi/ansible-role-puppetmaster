@@ -7,11 +7,6 @@
   register: puppet_configured
   ignore_errors: True
 
-- name: check if puppet.conf is OK
-  command: "grep -c 'server = ' {{puppet_etc_dir}}/puppet.conf"
-  register: puppet_conf_configured
-  ignore_errors: True
-
 - name: install puppetlabs repo
   yum: name={{item}} state=present
   with_items:
@@ -27,7 +22,6 @@
 
 - name: deploy basic puppet.conf for initial bootstrapping
   template: src=puppet.conf dest={{puppet_etc_dir}}/puppet.conf
-  when: puppet_configured is failed or puppet_conf_configured is failed
 
 - name: deploy basic puppetdb.conf for initial bootstrapping
   template: src=puppetdb.conf dest={{puppet_etc_dir}}/puppetdb.conf
@@ -80,16 +74,19 @@
   shell: chown -R puppet:puppet /etc/puppetlabs/code
 
 # puppetserver manages its own gems, and hiera-eyaml needs to be added to those gems for secrets to get passed properly to agents.
-- name: try hiera-eyaml gem install without proxy - timeout after 1min
-  shell: timeout 1m /opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml
-  ignore_errors: True
-- name: check hiera-eyaml gem
+- name: list puppetserver gems and grep for hiera-eyaml
   shell: /opt/puppetlabs/server/bin/puppetserver gem list | grep hiera-eyaml
   register: gem_list_eyaml
   ignore_errors: True
+  changed_when: False
+
 - name: install hiera-eyaml with proxy defined if puppetserver gem list did not find it
   command: "/opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml -p {{ yum_proxy }}"
   when: not ansible_check_mode and gem_list_eyaml.rc != 0 and yum_proxy is defined
+
+- name: try hiera-eyaml gem install without proxy if proxy is not defined
+  shell: /opt/puppetlabs/server/bin/puppetserver gem install hiera-eyaml
+  when: not ansible_check_mode and gem_list_eyaml.rc != 0 and yum_proxy is not defined
 
 - name: generate client certificate for puppetmaster
   command: "/opt/puppetlabs/bin/puppet cert --generate {{hostname}}"
@@ -108,3 +105,4 @@
   command: "/opt/puppetlabs/bin/puppet agent -t"
   register: reg_puppet_agent_result
   failed_when: (reg_puppet_agent_result.rc != 2) and (reg_puppet_agent_result.rc != 0)
+  when: ansible_connection != 'chroot'
