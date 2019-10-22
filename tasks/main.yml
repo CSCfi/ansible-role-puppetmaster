@@ -103,3 +103,8 @@
   command: "/opt/puppetlabs/bin/puppet apply --environment {{puppet_environment}} --pluginsync --hiera_config {{puppet_etc_dir}}/hiera.yaml --modulepath {{puppet_code_dir}}/environments/{{puppet_environment}}/modules {{puppet_code_dir}}/environments/{{puppet_environment}}/manifests"
   register: puppet_result
   failed_when: (puppet_result.rc != 2) and (puppet_result.rc != 0)
+
+- name: puppet agent to configure the puppetmaster
+  command: "/opt/puppetlabs/bin/puppet agent -t"
+  register: reg_puppet_agent_result
+  failed_when: (reg_puppet_agent_result.rc != 2) and (reg_puppet_agent_result.rc != 0)
