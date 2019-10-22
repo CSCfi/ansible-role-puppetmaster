@@ -106,4 +106,4 @@
   command: "/opt/puppetlabs/bin/puppet agent -t"
   register: reg_puppet_agent_result
   failed_when: (reg_puppet_agent_result.rc != 2) and (reg_puppet_agent_result.rc != 0)
-  when: ansible_connection != 'chroot'
+  when: ansible_connection != 'local'
