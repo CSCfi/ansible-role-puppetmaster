@@ -14,6 +14,8 @@
    - name: pre testingonly - install ruby gems first because we need eyaml to create keys
      gem: name="{{item.gem}}" state=present user_install=no version="{{ item.version }}"
      with_items: "{{ruby_gems_versions}}"
+   - name: pre testingonly - install hiera-eyaml first because we need them keys
+     gem: name="hiera-eyaml" state=present user_install=no
    - name: pre testingonly - create hiera keys
      command: eyaml createkeys --pkcs7-private-key=credentials/hiera_private_key.pkcs7.pem --pkcs7-public-key=credentials/hiera_public_key.pkcs7.pem
 ...

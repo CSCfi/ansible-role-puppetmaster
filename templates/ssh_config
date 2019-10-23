@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 # use hiera rsa key for github repositories
 Host github.com
     User git

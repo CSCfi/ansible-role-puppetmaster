@@ -1,4 +1,5 @@
 ---
+# {{ ansible_managed }}
 :backends:
   - yaml
   - eyaml
@@ -14,8 +15,9 @@
   - common
 
 :yaml:
-  :datadir: "{{puppet_etc_dir}}/environments/%{::environment}/hieradata"
+  :datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
 :eyaml:
-  :datadir: "{{puppet_etc_dir}}/environments/%{::environment}/hieradata"
+  :datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
   :pkcs7_private_key: "{{hiera_private_key_file}}"
   :pkcs7_public_key:  "{{hiera_public_key_file}}"
+...

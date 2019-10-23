@@ -1,25 +1,23 @@
 ---
 puppet_username: 'puppet'
-puppet_etc_dir: '/etc/puppet'
+puppet_etc_dir: '/etc/puppetlabs/puppet'
+puppet_code_dir: '/etc/puppetlabs/code'
 puppet_data_dir: '/var/lib/puppet'
 hiera_credentials_dir: "{{puppet_etc_dir}}/keys"
 puppet_environment: 'production'
 hostname: "{{ inventory_hostname }}"
-puppetlabs_repo_url: 'https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm'
+puppetlabs_repo_url: 'https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm'
 passenger_dot_repo_file_url: 'https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo'
 rpm_packages:
  - git
  - puppet
- - puppet-server
+ - puppetserver
+ - puppetdb-terminus
  - rubygems
-ruby_gems:
- - r10k
- - hiera-eyaml
 # workaround: puppet_forge 2.2.7 requires semantic_puppet ~> 1.0 while r10k requires ~> 0.1
 ruby_gems_versions:
   - { gem: 'puppet_forge', version: '2.2.6' }
-  - { gem: 'r10k', version: '' }
-  - { gem: 'hiera-eyaml', version: '' }
+  - { gem: 'r10k', version: '2.2.2' }
 
 hiera_private_key: "{{lookup('env','HIERA_PRIVATE_KEY')}}"
 hiera_public_key: "{{lookup('env','HIERA_PUBLIC_KEY')}}"
