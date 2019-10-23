@@ -72,7 +72,12 @@
   command: "/opt/puppetlabs/bin/puppet generate types --environment {{ puppet_environment }}"
 
 - name: ensure puppet can create the modules directory
-  shell: chown -R puppet:puppet /etc/puppetlabs/code
+  file:
+    path: "{{ puppet_code_dir }}"
+    owner: "{{ puppet_username }}"
+    group: "{{ puppet_username }}"
+    recurse: yes
+    state: directory
 
 # puppetserver manages its own gems, and hiera-eyaml needs to be added to those gems for secrets to get passed properly to agents.
 - name: list puppetserver gems and grep for hiera-eyaml
