@@ -96,7 +96,7 @@
   when: not ansible_check_mode and gem_list_eyaml.rc != 0 and yum_proxy is not defined
 
 - name: generate client certificate for puppetmaster on bootstrap
-  command: "/opt/puppetlabs/bin/puppet cert --generate {{hostname}}"
+  command: "/opt/puppetlabs/bin/puppet cert --generate {{ hostname }} --dns_alt_names={{ inventory_hostname_short }}"
   when: not puppet_configured.stat.exists
 
 - name: ignite CA directory on bootstrap
