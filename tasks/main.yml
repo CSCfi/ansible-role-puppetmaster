@@ -100,7 +100,7 @@
   when: not puppet_configured.stat.exists
 
 - name: Dynamic cccp feature branch assignment
-  shell: sed -i "/cccp.git/!b;n;c\ \ :ref\ \=\>\ \'{{cccp_branch}}\'" "{{puppet_etc_dir}}/environments/{{puppet_environment}}/Puppetfile"
+  shell: sed -i "/cccp.git/!b;n;c\ \ :ref\ \=\>\ \'{{cccp_branch}}\'" "{{puppet_code_dir}}/environments/{{puppet_environment}}/Puppetfile"
 
 - name: Actually deploy the cccp module per input
   command: "/usr/local/bin/r10k deploy module cccp -c {{puppet_etc_dir}}/r10k.yaml"
