@@ -105,6 +105,9 @@
 - name: Actually deploy the cccp module per input
   command: "/usr/local/bin/r10k deploy module cccp -c {{puppet_etc_dir}}/r10k.yaml"
 
+- name: regenerate types for the environments to prevent autoload issues
+  command: "/opt/puppetlabs/bin/puppet generate types --environment {{ puppet_environment }}"
+
 - name: ignite CA directory on bootstrap
   command: "/opt/puppetlabs/bin/puppet cert list -a"
   when: not puppet_configured.stat.exists
