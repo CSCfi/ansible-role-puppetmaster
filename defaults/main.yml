@@ -32,3 +32,4 @@ puppetmaster_ca_pubkey_file: "{{puppet_data_dir}}/ssl/ca/ca_pub.pem"
 puppetmaster_ca_cert_file: "{{puppet_data_dir}}/ssl/ca/ca_crt.pem"
 
 cccp_branch: master
+puppetize_puppetmaster: false

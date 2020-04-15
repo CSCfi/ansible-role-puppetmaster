@@ -123,4 +123,4 @@
   register: reg_puppet_agent_result
   failed_when: (reg_puppet_agent_result.rc != 2) and (reg_puppet_agent_result.rc != 0)
   changed_when: (reg_puppet_agent_result.rc == 2) or (reg_puppet_agent_result.rc == 4) or (reg_puppet_agent_result.rc == 6)
-  when: ansible_connection != 'local'
+  when: ansible_connection != 'local' and puppetize_puppetmaster
