@@ -81,6 +81,14 @@
     state: directory
 
 # puppetserver manages its own gems, and hiera-eyaml needs to be added to those gems for secrets to get passed properly to agents.
+## If for whatever reasons you get a
+## ERROR:  Could not find a valid gem 'hiera-eyaml' (>= 0), here is why:
+##         Unable to download data from https://rubygems.org - Received fatal alert: handshake_failure (https://api.rubygems.org/specs.4.8.gz)
+## You could consider a HACK where puppetserver uses system gems and arrange hiera-eyaml there.
+##    # grep gem-path /etc/puppetlabs/puppetserver/conf.d/puppetserver.conf
+##    gem-path: [${jruby-puppet.gem-home}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems", "/usr/local/share/gems"]
+##                                                                                                          ^^^^^^^^^^^^^^^^^^^^^
+
 - name: list puppetserver gems and grep for hiera-eyaml
   shell: /opt/puppetlabs/server/bin/puppetserver gem list | grep hiera-eyaml
   register: gem_list_eyaml
