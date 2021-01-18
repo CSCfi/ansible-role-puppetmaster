@@ -77,8 +77,7 @@
     path: "{{ puppet_code_dir }}"
     owner: "{{ puppet_username }}"
     group: "{{ puppet_username }}"
-    recurse: no
-    follow: no
+    recurse: yes
     state: directory
 
 # puppetserver manages its own gems, and hiera-eyaml needs to be added to those gems for secrets to get passed properly to agents.
