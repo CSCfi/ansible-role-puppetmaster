@@ -19,7 +19,7 @@
     state: present
 
 - name: install ruby gems
-  gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}} executable=/opt/puppetlabs/server/bin/gem"
+  gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}}" executable=/opt/puppetlabs/server/bin/gem
   with_items: "{{ruby_gems_versions}}"
 
 - name: deploy basic puppet.conf for initial bootstrapping
