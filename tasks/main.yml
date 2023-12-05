@@ -116,4 +116,4 @@
   changed_when: (reg_puppet_agent_result.rc == 2) or (reg_puppet_agent_result.rc == 4) or (reg_puppet_agent_result.rc == 6)
   when: ansible_connection != 'local'
   environment:
-    no_proxy: https://{{ inventory_hostname }}:8140
+    no_proxy: "{{ inventory_hostname }}"
