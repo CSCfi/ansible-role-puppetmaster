@@ -110,7 +110,7 @@
   changed_when: (puppet_result.rc == 2) or (puppet_result.rc == 4) or (puppet_result.rc == 6)
 
 - name: puppet agent to configure the puppetmaster
-  command: "/opt/puppetlabs/bin/puppet agent -t --environment {{puppet_environment}}"
+  command: "/opt/puppetlabs/bin/puppet agent -t --environment {{puppet_environment}} --server {{ inventory_hostname }}"
   register: reg_puppet_agent_result
   failed_when: (reg_puppet_agent_result.rc != 2) and (reg_puppet_agent_result.rc != 0)
   changed_when: (reg_puppet_agent_result.rc == 2) or (reg_puppet_agent_result.rc == 4) or (reg_puppet_agent_result.rc == 6)
