@@ -19,7 +19,7 @@
     state: present
 
 - name: install ruby gems
-  gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}}"
+  gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}}" executable=/opt/puppetlabs/puppet/bin/gem
   with_items: "{{ruby_gems_versions}}"
 
 - name: deploy basic puppet.conf for initial bootstrapping
@@ -67,7 +67,7 @@
   template: src=hiera.yaml dest={{puppet_etc_dir}}/hiera.yaml
 
 - name: deploy puppet environment with r10k
-  command: "/usr/local/bin/r10k deploy environment -c {{puppet_etc_dir}}/r10k.yaml -p -v error {{puppet_environment}}"
+  command: "/opt/puppetlabs/puppet/bin/r10k deploy environment -c {{puppet_etc_dir}}/r10k.yaml -p -v error {{puppet_environment}}"
 
 - name: generate types for the environments to prevent autoload issues
   command: "/opt/puppetlabs/bin/puppet generate types --environment {{ puppet_environment }}"
@@ -110,8 +110,10 @@
   changed_when: (puppet_result.rc == 2) or (puppet_result.rc == 4) or (puppet_result.rc == 6)
 
 - name: puppet agent to configure the puppetmaster
-  command: "/opt/puppetlabs/bin/puppet agent -t"
+  command: "/opt/puppetlabs/bin/puppet agent -t --environment {{puppet_environment}} --server {{ inventory_hostname }}"
   register: reg_puppet_agent_result
   failed_when: (reg_puppet_agent_result.rc != 2) and (reg_puppet_agent_result.rc != 0)
   changed_when: (reg_puppet_agent_result.rc == 2) or (reg_puppet_agent_result.rc == 4) or (reg_puppet_agent_result.rc == 6)
   when: ansible_connection != 'local'
+  environment:
+    no_proxy: "{{ inventory_hostname }}"
