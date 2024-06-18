@@ -18,6 +18,8 @@
   yum:
     name: "{{rpm_packages}}"
     state: present
+    enablerepo:
+      - puppet5
 
 - name: install ruby gems
   gem: name="{{item.gem}}" state=present user_install=no version="{{item.version}}" executable=/opt/puppetlabs/puppet/bin/gem
