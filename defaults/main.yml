@@ -12,7 +12,7 @@ rpm_packages:
  - git
  - puppet
  - puppetserver
- - puppetdb-terminus
+ - puppetdb-termini
  - rubygems
 # workaround: puppet_forge 2.2.7 requires semantic_puppet ~> 1.0 while r10k requires ~> 0.1
 ruby_gems_versions:
