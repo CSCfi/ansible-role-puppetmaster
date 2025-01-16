@@ -11,6 +11,7 @@
   - "hosts/%{::clientcert}"
   - overrides_for_%{::environment}
   - "%{::environment}"
+  - common_%{::environment}
   - users
   - common
 
