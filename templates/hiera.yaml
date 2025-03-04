@@ -1,23 +1,47 @@
 ---
 # {{ ansible_managed }}
-:backends:
-  - yaml
-  - eyaml
+version: 5
 
-:hierarchy:
-  - secret/overrides_for_%{::environment}
-  - secret/%{::environment}
-  - secret/common
-  - "hosts/%{::clientcert}"
-  - overrides_for_%{::environment}
-  - "%{::environment}"
-  - users
-  - common
+defaults:
+  datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
+  data_hash: yaml_data
 
-:yaml:
-  :datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
-:eyaml:
-  :datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
-  :pkcs7_private_key: "{{hiera_private_key_file}}"
-  :pkcs7_public_key:  "{{hiera_public_key_file}}"
+#backends:
+#  - yaml
+#  - eyaml
+
+hierarchy:
+  - name: "Secrets in eyaml"
+    lookup_key: eyaml_lookup_key
+    paths:
+      - "secret/overrides_for_%{::environment}.eyaml"
+      - "secret/%{::environment}.eyaml"
+      - "secret/common.eyaml"
+    options:
+      pkcs7_private_key: "{{hiera_private_key_file}}"
+      pkcs7_public_key:  "{{hiera_public_key_file}}"
+  - name: "Other data in yaml"
+    paths:
+      - "hosts/%{::clientcert}.yaml"
+      - "overrides_for_%{::environment}.yaml"
+      - "%{::environment}.yaml"
+      - "users.yaml"
+      - "common.yaml"
+
+#hierarchy:
+#  - secret/overrides_for_%{::environment}
+#  - secret/%{::environment}
+#  - secret/common
+#  - "hosts/%{::clientcert}"
+#  - overrides_for_%{::environment}
+#  - "%{::environment}"
+#  - users
+#  - common
+
+#yaml:
+#  datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
+#eyaml:
+#  datadir: "{{puppet_code_dir}}/environments/%{::environment}/hieradata"
+#  pkcs7_private_key: "{{hiera_private_key_file}}"
+#  pkcs7_public_key:  "{{hiera_public_key_file}}"
 ...
