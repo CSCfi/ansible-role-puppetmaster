@@ -105,7 +105,7 @@
   when: not puppet_configured.stat.exists
 
 - name: run masterless puppet to configure the puppetmaster - NOTE! this will always create a change due to CCCP-2840
-  command: "/opt/puppetlabs/bin/puppet apply --detailed-exitcodes --environment {{puppet_environment}} --pluginsync --hiera_config {{puppet_etc_dir}}/hiera.yaml --modulepath {{puppet_code_dir}}/environments/{{puppet_environment}}/modules {{puppet_code_dir}}/environments/{{puppet_environment}}/manifests"
+  command: "/opt/puppetlabs/bin/puppet apply --detailed-exitcodes --environment {{puppet_environment}} --hiera_config {{puppet_etc_dir}}/hiera.yaml --modulepath {{puppet_code_dir}}/environments/{{puppet_environment}}/modules {{puppet_code_dir}}/environments/{{puppet_environment}}/manifests"
   register: puppet_result
   failed_when: (puppet_result.rc != 2) and (puppet_result.rc != 0)
   changed_when: (puppet_result.rc == 2) or (puppet_result.rc == 4) or (puppet_result.rc == 6)
