@@ -19,6 +19,7 @@ hierarchy:
   - name: "Other data in yaml"
     paths:
       - "hosts/%{::clientcert}.yaml"
+      - "os/%{facts.os.name}/%{facts.os.release.major}.yaml"
       - "overrides_for_%{::environment}.yaml"
       - "%{::environment}.yaml"
       - "users.yaml"
