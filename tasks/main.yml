@@ -107,8 +107,8 @@
 - name: Make sure that symlink for quarantine environment is in place
   file:
     state: link
-    src: test
-    path: /etc/puppetlabs/code/environments/{{ puppet_environment }}
+    src: "{{ puppet_environment }}"
+    path: /etc/puppetlabs/code/environments/quarantine
     force: true
 
 - name: run masterless puppet to configure the puppetmaster - NOTE! this will always create a change due to CCCP-2840
